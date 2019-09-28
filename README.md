@@ -19,6 +19,13 @@ If everything is correct your images should look like this:
 
 ## Problem 4.3
 ### Texturing (? Points)
+Until now we have only used one color per object. Nevertheless, in reality, _e.g._ in games, objects are very often colorful because of the usage of textures. This is also a way of making a surface look more geometrically complex. Usually, textures are used by storing _texture coordinates_ at the vertices of each triangles, and interpolating those to find the correct texel that has to be used for a surface point.
+1. Turn BSP-support on
+2. In the framework is a new class ```TexturedSmoothTriangle``` (derived from ```SmoothTriangle```), that additionally has the three fields ```Vec3f ta,tb,tc```, which correspond to the texture coordinates at vertex ```a```, ```b```, or ```c```, respectively. For the sake of simplicity we will use ```Vec3f```’s to store the texture coordinates, even though they usually require only 2 coordinates (barycentric coordinates). Add support for texture coordinates to your parser (```ParseOBJ()```).
+3. Implemet the method ```Vec3f TexturedSmoothTriangle::GetUV(Ray& ray, float& u, float& v)``` which is now a virtual method in your primitive base class. In ```TexturedSmoothTriangle```, implement this function to return the ```x``` and ```y``` coordinates of the interpolated vertex texture coordinates. (For other primitives, just ignore it for now, we’ll only use texture-shaders with triangles for now).
+4. Implement the ```TexturedEyeLightShader::Shade()``` method to use the texture coordinates returned by ```getUV()``` and combine the texel color with the calculated eyelight color using the vector product. 
+
+Test your implementation on barney.obj with barney.ppm. If everything is correct your image should look like this:
 
 ## Problem 4.4
 ### Supersampling (? Points)
