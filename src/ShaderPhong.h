@@ -30,7 +30,7 @@ public:
 	virtual Vec3f Shade(const Ray& ray) const override
 	{
 		// get shading normal
-		Vec3f normal = ray.hit->GetNormal(ray);
+		Vec3f normal = ray.hit->getNormal(ray);
 
 		// turn normal to front
 		if (normal.dot(ray.dir) > 0)
