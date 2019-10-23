@@ -15,7 +15,7 @@ source_group("Source Files\\camera" FILES "src/ICamera.h" "src/CameraPerspective
 source_group("Source Files\\lights" FILES "src/ILight.h" "src/LightPoint.h" "src/LightArea.h")
 source_group("Source Files\\primitives" FILES "src/Prim.h" "src/PrimSphere.h" "src/PrimPlane.h")
 source_group("Source Files\\primitives\\triangle" FILES "src/PrimTriangle.h" "src/PrimTriangleSmooth.h")
-source_group("Source Files\\shaders" FILES "src/IShader.h" "src/ShaderFlat.h" "src/ShaderEyelight.h" "src/ShaderPhong.h")
+source_group("Source Files\\shaders" FILES "src/IShader.h" "src/ShaderFlat.h" "src/ShaderEyelight.h" "src/ShaderPhong.h" "src/ShaderPhongBumpMapped.h")
 source_group("Source Files\\scene" FILES "src/Scene.h" "src/Scene.cpp")
 source_group("Source Files\\utilities" FILES "src/ray.h" "src/random.h" "src/timer.h")
 source_group("Source Files\\utilities\\BSP Tree" FILES "src/BSPNode.h" "src/BSPTree.h" "src/BoundingBox.h")
