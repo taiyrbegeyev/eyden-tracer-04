@@ -3,7 +3,7 @@
 #include "ShaderFlat.h"
 #include "Scene.h"
 
-const int nAreaSamples = 1000;
+const int nAreaSamples = 1;
 
 class CShaderPhong : public CShaderFlat
 {

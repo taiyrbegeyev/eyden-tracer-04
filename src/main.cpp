@@ -9,6 +9,7 @@
 #include "ShaderFlat.h"
 #include "ShaderEyelight.h"
 #include "ShaderPhong.h"
+#include "ShaderPhongBumpMapped.h"
 
 #include "LightPoint.h"
 #include "LightArea.h"
@@ -26,7 +27,7 @@ Mat RenderFrame(void)
 	CScene scene;
 
 	// Load scene description 
-	scene.ParseOBJ("../data/cone32.obj");
+//	scene.ParseOBJ("../data/cone32.obj");
 //	scene.ParseOBJ("barney.obj");
 //	scene.ParseOBJ("ground.obj");
 
@@ -37,32 +38,23 @@ Mat RenderFrame(void)
 
 	// --- Scene description for 4.2 only ---
 
-	// BumpMappedPhongShader shd1(&scene, Vec3f(1,0,0), 0.1, 0.5, 0.5, 40); // red surface
-	// BumpMappedPhongShader shd2(&scene, Vec3f(1,1,0), 0.1, 0.5, 0.5, 40); // yellow surface
-
-	// PhongShader shd3(&scene, Vec3f(0,1,1), 0.1, 0.5, 0.5, 40); // cyan surface
-	// PhongShader shd4(&scene, Vec3f(0,0,1), 0.1, 0.5, 0.5, 40); // blue surface
-
-
-	// Sphere s1(Vec3f(-2,1.7,0),2, &shd1);
-	// Sphere s2(Vec3f(1,-1,1),2.2, &shd3);
-	// Sphere s3(Vec3f(3,0.8,-2),2, &shd4);
-	// InfinitePlane p1(Vec3f(0,-1,0),Vec3f(0,1,0), &shd2);
-
-	// scene.Add(&s1);
-	// scene.Add(&s2);
-	// scene.Add(&s3);
-	// scene.Add(&p1);
+	auto shd1 = std::make_shared<CShaderPhongBumpMapped>(scene, RGB(1, 0, 0), 0.1f, 0.5f, 0.5f, 40); // red surface
+	auto shd2 = std::make_shared<CShaderPhongBumpMapped>(scene, RGB(1, 1, 0), 0.1f, 0.5f, 0.5f, 40); // yellow surface
 	
-	// Vec3f pointLightIntensity(7,7,7);
-	// Vec3f lightPosition2(-3,5,+4);
-	// Vec3f lightPosition3(0,1,+4);
+	auto shd3 = std::make_shared<CShaderPhong>(scene, RGB(0, 1, 1), 0.1f, 0.5f, 0.5f, 40); // cyan surface
+	auto shd4 = std::make_shared<CShaderPhong>(scene, RGB(0, 0, 1), 0.1f, 0.5f, 0.5f, 40); // blue surface
 	
-	// PointLight pointLight2(&scene, lightPosition2, pointLightIntensity);
-	// PointLight pointLight3(&scene, lightPosition3, pointLightIntensity);
+	scene.Add(std::make_shared<CPrimSphere>(Vec3f(-2, 1.7f, 0), 2, shd1));
+	scene.Add(std::make_shared<CPrimSphere>(Vec3f(1, -1, 1), 2.2f, shd3));
+	scene.Add(std::make_shared<CPrimSphere>(Vec3f(3, 0.8f, -2), 2, shd4));
+	scene.Add(std::make_shared<CPrimPlane>(Vec3f(0, -1, 0), Vec3f(0, 1, 0), shd2));
 	
-	// scene.Add(&pointLight2);
-	// scene.Add(&pointLight3);
+	Vec3f pointLightIntensity(7, 7, 7);
+	Vec3f lightPosition2(-3, 5, 4);
+	Vec3f lightPosition3(0, 1, 4);
+	
+	scene.Add(std::make_shared<CLightPoint>(pointLightIntensity, lightPosition2));
+	scene.Add(std::make_shared<CLightPoint>(pointLightIntensity, lightPosition3));
 
 	// --- End description for 4.2 ---
 
@@ -74,7 +66,7 @@ Mat RenderFrame(void)
 #ifdef OVERSAMPLING
 	for (int y = 0; y < img.rows; y++)
 		for (int x = 0; x < img.cols; x++) {
-
+			// --- PUT YOUR CODE HERE ---
 		}
 	}
 #else
