@@ -49,6 +49,7 @@ public:
 		ray.org = m_pos;
 		ray.dir = normalize(m_aspect * sscx * m_xAxis + sscy * m_yAxis + m_focus * m_zAxis);
 		ray.t = std::numeric_limits<float>::infinity();
+		ray.hit = NULL;
 	}
 
 
