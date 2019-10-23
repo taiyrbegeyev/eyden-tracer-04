@@ -13,4 +13,6 @@ struct Ray
 	Vec3f			dir;		///< Direction
 	float			t;			///< Current/maximum hit distance
 	const CPrim*	hit;		///< Pointer to currently closest primitive
+	float			u;			///< Barycentric u coordinate
+	float			v;			///< Barycentric v coordinate
 };
