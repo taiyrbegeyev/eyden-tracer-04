@@ -14,6 +14,7 @@ public:
 	 * @brief Constructor
 	 * @param center Position of the center of the sphere
 	 * @param radius Radius of the sphere
+	 * @param pShader Pointer to the shader to be applied for the prim
 	 */
 	CPrimSphere(Vec3f center, float radius, std::shared_ptr<IShader> pShader)
 		: CPrim(pShader)
@@ -54,7 +55,7 @@ public:
 		return true;
 	}
 	
-	virtual Vec3f GetNormal(const Ray& ray) const override
+	virtual Vec3f getNormal(const Ray& ray) const override
 	{
 		Vec3f hit = ray.org + ray.t * ray.dir;
 		Vec3f normal = hit - m_center;
@@ -64,9 +65,10 @@ public:
 
 	virtual CBoundingBox calcBounds(void) const override
 	{
-		CBoundingBox res;
-		// --- PUT YOUR CODE HERE ---
-		return res;
+		CBoundingBox box;
+		box.extend(m_center - Vec3f::all(m_radius));
+		box.extend(m_center + Vec3f::all(m_radius));
+		return box;
 	}
 	
 private:

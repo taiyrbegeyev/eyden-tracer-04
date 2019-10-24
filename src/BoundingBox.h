@@ -1,8 +1,8 @@
 #pragma once
 
 #include "types.h"
+#include "ray.h"
 
-struct Ray;
 
 namespace {
 	inline Vec3f Min3f(const Vec3f a, const Vec3f b)
@@ -31,7 +31,8 @@ public:
 	 */
 	void clear(void)
 	{
-		// --- PUT YOUR CODE HERE ---
+		m_min = Vec3f::all(std::numeric_limits<float>::infinity());
+		m_max = Vec3f::all(-std::numeric_limits<float>::infinity());
 	}
 	
 	/**
@@ -40,7 +41,8 @@ public:
 	 */
 	void extend(Vec3f a)
 	{
-		// --- PUT YOUR CODE HERE ---
+		m_min = Min3f(a, m_min);
+		m_max = Max3f(a, m_max);
 	}
 	
 	/**
@@ -49,7 +51,8 @@ public:
 	 */
 	void extend(const CBoundingBox& box)
 	{
-		// --- PUT YOUR CODE HERE ---
+		extend(box.m_min);
+		extend(box.m_max);
 	}
 	
 	/**
@@ -58,7 +61,10 @@ public:
 	 */
 	bool overlaps(const CBoundingBox& box)
 	{
-		// --- PUT YOUR CODE HERE ---
+		for (int i = 0; i < 3; i++) {
+			if (box.m_min[i] - Epsilon > m_max[i]) return false;
+			if (box.m_max[i] + Epsilon < m_min[i]) return false;
+		}
 		return true;
 	}
 	
@@ -70,11 +76,43 @@ public:
 	 */
 	void clip(const Ray& ray, float& t0, float& t1)
 	{
-		// --- PUT YOUR CODE HERE ---
+		float d, den;
+		den = 1.0f / ray.dir.val[0];
+		if (ray.dir.val[0] > 0) {
+			if ((d = (m_min.val[0] - ray.org.val[0]) * den) > t0) t0 = d;
+			if ((d = (m_max.val[0] - ray.org.val[0]) * den) < t1) t1 = d;
+		}
+		else {
+			if ((d = (m_max.val[0] - ray.org.val[0]) * den) > t0) t0 = d;
+			if ((d = (m_min.val[0] - ray.org.val[0]) * den) < t1) t1 = d;
+		}
+		if (t0 > t1) return;
+
+		den = 1.0f / ray.dir.val[1];
+		if (ray.dir.val[1] > 0) {
+			if ((d = (m_min.val[1] - ray.org.val[1]) * den) > t0) t0 = d;
+			if ((d = (m_max.val[1] - ray.org.val[1]) * den) < t1) t1 = d;
+		}
+		else {
+			if ((d = (m_max.val[1] - ray.org.val[1]) * den) > t0) t0 = d;
+			if ((d = (m_min.val[1] - ray.org.val[1]) * den) < t1) t1 = d;
+		}
+		if (t0 > t1) return;
+
+		den = 1.0f / ray.dir.val[2];
+		if (ray.dir.val[2] > 0) {
+			if ((d = (m_min.val[2] - ray.org.val[2]) * den) > t0) t0 = d;
+			if ((d = (m_max.val[2] - ray.org.val[2]) * den) < t1) t1 = d;
+		}
+		else {
+			if ((d = (m_max.val[2] - ray.org.val[2]) * den) > t0) t0 = d;
+			if ((d = (m_min.val[2] - ray.org.val[2]) * den) < t1) t1 = d;
+		}
+		return;
 	}
 	
 	
 public:
-	Vec3f m_min;	///< The minimal point defying the size of the bounding box
-	Vec3f m_max;	///< The maximal point defying the size of the bounding box
+	Vec3f m_min = Vec3f::all(std::numeric_limits<float>::infinity());	///< The minimal point defying the size of the bounding box
+	Vec3f m_max = Vec3f::all(-std::numeric_limits<float>::infinity());	///< The maximal point defying the size of the bounding box
 };

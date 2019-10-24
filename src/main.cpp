@@ -25,9 +25,9 @@ Mat RenderFrame(void)
 	CScene scene;
 
 	// Load scene description 
-//	scene.ParseOBJ("../data/cone32.obj");
+	scene.ParseOBJ("../data/cone32.obj");
 //	scene.ParseOBJ("../data/barney.obj");
-	scene.ParseOBJ("../data/ground.obj");
+//	scene.ParseOBJ("../data/ground.obj");
 
 #ifdef ENABLE_BSP
 	// Build BSPTree

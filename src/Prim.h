@@ -16,6 +16,7 @@ class CPrim
 public:
 	/**
 	* @brief Constructor
+	* @param pShader Pointer to the shader to be applied for the prim
 	*/
 	CPrim(std::shared_ptr<IShader> pShader) : m_pShader(pShader) {}
 	CPrim(const CPrim&) = delete;
@@ -39,7 +40,13 @@ public:
 	 * @param ray The ray
 	 * @return The normalized normal of the primitive
 	 */
-	virtual Vec3f			GetNormal(const Ray& ray) const = 0;
+	virtual Vec3f			getNormal(const Ray& ray) const = 0;
+	/**
+	 * @brief Returns the coordinates (\a u and \a v) of the texture point at the ray \b ray - primitive intersection point 
+	 * @param ray The ray
+	 * @return The texture coordiantes \a u and \a v
+	 */
+	virtual Vec2f			getUV(const Ray& ray) const { return Vec2f(0, 0); }
 	/**
 	 * @brief Returns the bounding box, which contain the primitive
 	 * @returns The bounding box, which contain the primitive
@@ -53,8 +60,7 @@ public:
 	 */
 	virtual bool 			inVoxel(const CBoundingBox& box) const
 	{
-		// --- PUT YOUR CODE HERE ---
-		return true;
+		return calcBounds().overlaps(box);
 	}
 	
 	std::shared_ptr<IShader> getShader(void) const { return m_pShader; }

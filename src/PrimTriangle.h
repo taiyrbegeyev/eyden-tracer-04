@@ -15,6 +15,7 @@ public:
 	 * @param a Position of the first vertex
 	 * @param b Position of the second vertex
 	 * @param c Position of the third vertex
+	 * @param pShader Pointer to the shader to be applied for the prim
 	 */
 	CPrimTriangle(Vec3f a, Vec3f b, Vec3f c, std::shared_ptr<IShader> pShader)
 		: CPrim(pShader)
@@ -52,12 +53,16 @@ public:
 		f *= inv_det;
 		if (ray.t <= f || f <  Epsilon  ) return false;
 		
+		// --- PUT YOUR CODE HERE ---
+		// ray.u = ...
+		// ray.v = ...
+
 		ray.t = f;
 		ray.hit = this;
 		return true;
 	}
 
-	virtual Vec3f GetNormal(const Ray& ray) const override
+	virtual Vec3f getNormal(const Ray& ray) const override
 	{
 		const Vec3f edge1 = m_b - m_a;
 		const Vec3f edge2 = m_c - m_a;
@@ -68,7 +73,9 @@ public:
 	virtual CBoundingBox calcBounds(void) const override
 	{
 		CBoundingBox res;
-		// --- PUT YOUR CODE HERE ---
+		res.extend(m_a);
+		res.extend(m_b);
+		res.extend(m_c);
 		return res;
 	}
 	

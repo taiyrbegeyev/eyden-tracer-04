@@ -36,11 +36,33 @@ public:
 	 */
 	std::shared_ptr<CBSPNode> BuildTree(const CBoundingBox& box, const std::vector<std::shared_ptr<CPrim>>& vpPrims, int depth)
 	{
-		float splitVal;
-		int splitDim;
-		std::shared_ptr<CBSPNode> pLeft;
-		std::shared_ptr<CBSPNode> pRight;
-		// --- PUT YOUR CODE HERE ---
+		if (depth > m_maxDepth || vpPrims.size() <= m_minTri) {
+			// could do some optimizations here..
+			return std::make_shared<CBSPNode>(vpPrims);
+		}
+
+		Vec3f diam = box.m_max - box.m_min;
+
+		int splitDim = MaxDim(diam);
+
+		CBoundingBox lBounds = box;
+		CBoundingBox rBounds = box;
+
+		float splitVal = lBounds.m_max[splitDim] = rBounds.m_min[splitDim] = (box.m_min[splitDim] + box.m_max[splitDim]) * 0.5f;
+
+		std::vector<std::shared_ptr<CPrim>> lPrim;
+		std::vector<std::shared_ptr<CPrim>> rPrim;
+
+		for (auto pPrim : vpPrims) {
+			if (pPrim->inVoxel(lBounds))
+				lPrim.push_back(pPrim);
+			if (pPrim->inVoxel(rBounds))
+				rPrim.push_back(pPrim);
+		}
+
+		auto pLeft = BuildTree(lBounds, lPrim, depth + 1);
+		auto pRight = BuildTree(rBounds, rPrim, depth + 1);
+
 		return std::make_shared<CBSPNode>(splitVal, splitDim, pLeft, pRight);
 	}
 
@@ -51,7 +73,19 @@ public:
 	 */
 	bool Intersect(Ray& ray)
 	{
-		// --- PUT YOUR CODE HERE ---
+		float t0 = 0;
+		float t1 = ray.t;
+
+		m_bounds.clip(ray, t0, t1);
+
+		if (t1 - t0 < Epsilon)
+			return false;
+
+		m_root->traverse(ray, t0, t1);
+
+		if (ray.hit)
+			return true;
+
 		return false;
 	}
 
@@ -59,7 +93,7 @@ public:
 private:
 	CBoundingBox 				m_bounds;
 	const int 	 				m_maxDepth;
-	const int 	 				m_minTri;
+	const size_t	 			m_minTri;
 	std::shared_ptr<CBSPNode> 	m_root;
 };
 	
