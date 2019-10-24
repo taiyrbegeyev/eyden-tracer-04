@@ -19,6 +19,7 @@ source_group("Source Files\\shaders" FILES "src/IShader.h" "src/ShaderFlat.h" "s
 source_group("Source Files\\scene" FILES "src/Scene.h" "src/Scene.cpp")
 source_group("Source Files\\utilities" FILES "src/ray.h" "src/texture.h" "src/random.h" "src/timer.h")
 source_group("Source Files\\utilities\\BSP Tree" FILES "src/BSPNode.h" "src/BSPTree.h" "src/BoundingBox.h")
+source_group("Source Files\\utilities\\sample generators" FILES "src/SampleGenerator.h" "src/SampleGeneratorRandom.h" "src/SampleGeneratorRegular.h" "src/SampleGeneratorStratified.h")
 
 # OpenCV package
 find_package(OpenCV 4.0 REQUIRED core highgui imgproc imgcodecs PATHS "$ENV{OPENCVDIR}/build")
@@ -46,6 +47,7 @@ add_definitions(-D_CRT_SECURE_NO_WARNINGS -D_SCL_SECURE_NO_WARNINGS)
 # Options
 include(CMakeDependentOption)
 option(ENABLE_BSP "Use Binary Space Partitioning (BSP) Tree for optimized ray traversal" ON)
+option(ENABLE_SUPERSAMPLING "Use super sampling" OFF)
 
 add_executable(eyden-tracer ${INCLUDE} ${SOURCES} ${HEADERS})
 

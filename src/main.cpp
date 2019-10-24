@@ -11,15 +11,13 @@
 #include "ShaderPhong.h"
 #include "ShaderPhongBumpMapped.h"
 
+#include "SampleGeneratorRegular.h"
+#include "SampleGeneratorRandom.h"
+#include "SampleGeneratorStratified.h"
+
 #include "LightPoint.h"
 #include "LightArea.h"
 #include "timer.h"
-
-
-//int samples;
-//SampleGenerator* sampleGenerator = NULL;
-
-//#define OVERSAMPLING
 
 Mat RenderFrame(void)
 {
@@ -28,8 +26,8 @@ Mat RenderFrame(void)
 
 	// Load scene description 
 //	scene.ParseOBJ("../data/cone32.obj");
-	scene.ParseOBJ("../data/barney.obj");
-//	scene.ParseOBJ("ground.obj");
+//	scene.ParseOBJ("../data/barney.obj");
+	scene.ParseOBJ("../data/ground.obj");
 
 #ifdef ENABLE_BSP
 	// Build BSPTree
@@ -63,8 +61,13 @@ Mat RenderFrame(void)
 	Ray ray;                                          			// primary ray
 
 
-#ifdef OVERSAMPLING
-	for (int y = 0; y < img.rows; y++)
+#ifdef ENABLE_SUPERSAMPLING
+	auto sampleGenerator = std::make_unique<CSampleGeneratorRegular>();
+//	auto sampleGenerator = std::make_unique<CSampleGeneratorRandom>();
+//	auto sampleGenerator = std::make_unique<CSampleGeneratorStratified>();
+	int nSamples = 16;
+
+	for (int y = 0; y < img.rows; y++) {
 		for (int x = 0; x < img.cols; x++) {
 			// --- PUT YOUR CODE HERE ---
 		}
@@ -77,43 +80,12 @@ Mat RenderFrame(void)
 		}
 #endif
 
-#ifdef OVERSAMPLING
-	delete sampleGenerator;
-#endif
-	
 	img.convertTo(img, CV_8UC3, 255);
 	return img;
 }
 
 int main(int argc, char* argv[])
 {
-	//if (argc == 3 && !strcmp(argv[1], "-regular")) {
-	//	samples = atoi(argv[2]);
-	//	sampleGenerator = new RegularSampleGenerator;
-	//}
-	//else if (argc == 3 && !strcmp(argv[1], "-random")) {
-	//	samples = atoi(argv[2]);
-	//	sampleGenerator = new RandomSampleGenerator;
-	//}
-	//else if (argc == 3 && !strcmp(argv[1], "-stratified")) {
-	//	samples = atoi(argv[2]);
-	//	sampleGenerator = new StratifiedSampleGenerator;
-	//}
-	//else if (argc == 1)
-	//{
-	//	samples = 4;
-	//	sampleGenerator = new RandomSampleGenerator;
-	//}
-	//else {
-	//	std::cerr << "Usage: " << argv[0] << " [option(s)]" << std::endl;
-	//	std::cerr << std::endl;
-	//	std::cerr << "Options are:" << std::endl;
-	//	std::cerr << "  -regular <samples>    : Regular sampling." << std::endl;
-	//	std::cerr << "  -random <samples>     : Random sampling." << std::endl;
-	//	std::cerr << "  -stratified <samples> : Stratified sampling." << std::endl;
-	//	exit(1);
-	//}
-
 	Mat img = RenderFrame();
 	imshow("Image", img);
 	waitKey();
