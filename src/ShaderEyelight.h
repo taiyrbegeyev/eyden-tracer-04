@@ -11,7 +11,6 @@ public:
 	/**
 	 * @brief Constructor
 	 * @details This is a texture-free and light-source-free shader
-	 * @param scene Reference to the scene
 	 * @param color The color of the object
 	 */
 	CShaderEyelight(Vec3f color = RGB(0.5f, 0.5f, 0.5f))
