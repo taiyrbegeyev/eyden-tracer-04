@@ -1,7 +1,7 @@
 # Practical Assignment 4
 **Name:** .......
 ## Problem 4.1 
-### Vertex Normals (? Points)
+### Vertex Normals (Points 20)
 Rather then storing a single _geometry normal_ for a triangle, it is often useful to store at each ```vertex``` a corresponding _vertex normal_. The advantage is that if we have a hit point on a triangle, the shading normal can be smoothly interpolated between the vertex normals. If neighboring triangles share the same vertex normals, a smooth appearance can be generated over non-smooth tesselated geometry.  
 Proceed as follows:
 1. Fork the current repository.
@@ -20,7 +20,7 @@ If everything is correct your images should look like this:
 <img src="./doc/cone.jpg" width="400px"><img src="./doc/cone_smooth.jpg" width="400px">
 
 ## Problem 4.2
-### Procedual Bump Mapping (? Points)
+### Procedual Bump Mapping (Points 20)
 In the last exercise you have learned that the appearence of a surface can be changed by using a modified _surface normal_. In this exercise we will implement a technique called _bump mapping_ which bumps the surface normal sideways such that a surface has the impression of beeing bumped. This often allows to generate the appearance of highly complex surface with only very few primitives. In order to do this, three parameters have to be known for each surface point:
 1. The original surface normal _N_.
 2. A local coordinate frame for this surface point. Though any coordinate frame can be used (as long as it is consistent), the usual way is to use the surface derivates in _u_ and _v_ direction, called _dPdu_ and _dPdv_.
@@ -39,7 +39,7 @@ If your shader work correct you should get an image like this using the scene de
 As getting the correct surface derivates can be somewhat complicated, there is also a simpler (though not as powerful) way of getting an orthonormal surface coordinate frame from the surface normal, which is similar to our way of generating the orthonormal camera coordinate frame from the camera direction. For a detailed discussion about surface derivatives you can also read Matt Pharr’s book _Physically Based Rendering_.
 
 ## Problem 4.3
-### Texturing (? Points)
+### Texturing (Points 30)
 Until now we have only used one color per object. Nevertheless, in reality, _e.g._ in games, objects are very often colorful because of the usage of textures. This is also a way of making a surface look more geometrically complex. Usually, textures are used by storing _texture coordinates_ at the vertices of each triangles, and interpolating those to find the correct texel that has to be used for a surface point.
 1. Turn BSP-support on
 2. In the framework is a new class ```CPrimTriangleSmoothTextured``` (derived from ```CPrimTriangleSmooth```), that additionally has the three fields ```Vec2f ta, tb, tc```, which correspond to the texture coordinates at vertex ```a```, ```b```, and ```c```, respectively. Here we will use ```Vec2f```’s to store the texture coordinates (not ```Vec3f```), because they require only 2 coordinates (barycentric coordinates). Add support for texture coordinates to your parser (```CScene::ParseOBJ()```).
@@ -50,7 +50,7 @@ Test your implementation on barney.obj with barney.bmp. If everything is correct
 ![barney](./doc/barney.jpg)
 
 ## Problem 4.4
-### Supersampling (? Points)
+### Supersampling (Points 10 + 10 + 10)
 A pixel actually corresponds to a square area. Currently you are sampling the pixels only at their center, which lead to aliasing. As you have learned in the lecture, the most simple way for removing aliasing artifacts from your image is _supersampling_, _i.e._ to shoot more than one ray per pixels. The three most frequently used supersampling strategies are:  
 
 **Regular Sampling:** The Pixel is subdivided into _n = m x m_ equally sized regions, which are sampled in the middle:  
@@ -66,4 +66,6 @@ In this exercise your task is to implement these sampling strategies:
 - In the framework you can find an abstract base class ```CSampleGenerator``` with one single virtual method ```void SampleGenerator::GetSamples(int n, float *u, float *v, float *weight)```, which is supposed to works as follows: _n_ is the number of samples to be generated for a pixel. One sample consists of two coordinates (_u_, _v_) that specify a position on a pixel. The _n_ samples generated are then to be returned in the _u_ and _v_ arrays, where (_u_, _v_) should be in the domain _[0 .. 1) X [0 .. 1)_. The weights for the individual samples should sum up to 1, here just use uniform weights with ```weight[i]=1.0f/n```.
 - In your main loop, produce _n_ samples, and fire _n_ rays through the pixel at the respective sample position. The resulting color values must be weighted by ```weight[i]``` and summed up, which yields the final pixel result.
 - Implement the ```getSamples()``` method in SampleGeneratorRegular.h, SampleGeneratorRandom.h, and SampleGeneratorStratified.h which are derived classes from ```CSampleGenerator```.
-Use ground.obj and cb.bmp to render your image with 4 samples and compare them to the following images:
+Use ground.obj and cb.bmp to render your image with 4 samples and compare them to the following images: (regular) (random) (stratified)
+
+<img src="./doc/regular.jpg" alt="regular" width="280px"><img src="./doc/random.jpg" alt="random" width="280px"><img src="./doc/stratified.jpg" alt="stratified" width="280px">
