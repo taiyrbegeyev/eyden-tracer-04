@@ -53,9 +53,15 @@ public:
 		f *= inv_det;
 		if (ray.t <= f || f <  Epsilon  ) return false;
 		
-		// --- PUT YOUR CODE HERE ---
-		// ray.u = ...
-		// ray.v = ...
+		Vec3f p = ray.org + f * ray.dir;
+		float area = norm(edge1.cross(edge2));
+
+		Vec3f Vec_AP = p - m_a;
+		float area_U = norm(Vec_AP.cross(edge1));
+		ray.u = area_U / area;
+
+		float area_V = norm(Vec_AP.cross(edge2));
+		ray.v = area_V / area;
 
 		ray.t = f;
 		ray.hit = this;
