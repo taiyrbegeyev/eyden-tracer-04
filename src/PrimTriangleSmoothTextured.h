@@ -21,7 +21,8 @@ public:
 		// assume u/v coordinates in ray correspond to beta(u) and gamma(v) barycentric coordinates of 
 		// hitpoint on triangle (have to be stored like this in the intersection code !)
 		// --- PUT YOUR CODE HERE ---
-		return Vec2f(0, 0);
+		Vec2f uv = (1 - ray.u - ray.v) * m_ta   + ray.u * m_tb + ray.v * m_tc;
+		return uv;
 	}
 
 
@@ -30,4 +31,3 @@ private:
 	Vec2f m_tb;	///< vertex b texture coordiante
 	Vec2f m_tc;	///< vertex c texture coordiante 
 };	
-
